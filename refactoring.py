@@ -22,6 +22,15 @@ class Rental(object):
     def __init__(self,movie,days_rented):
         self.movie, self.days_rented = movie, days_rented
 
+    def charge(self):
+        result = 0
+        result = {
+                Movie.REGULAR: lambda result: result + 2 + (self.days_rented - 2) * 1.5 if self.days_rented > 2 else result + 2,
+                Movie.NEW_RELEASE: lambda result: result + self.days_rented * 3,
+                Movie.CHILDRENS: lambda result: result + 1.5 + (self.days_rented - 3) * 1.5 if self.days_rented > 3 else result+ 1.5
+            }[self.movie.price_code](result)
+        return result
+
 
 class Customer(object):
 
@@ -54,13 +63,7 @@ class Customer(object):
         return result
 
     def amount_for(self,rental):
-        result = 0
-        result = {
-                Movie.REGULAR: lambda result: result + 2 + (rental.days_rented - 2) * 1.5 if rental.days_rented > 2 else result + 2,
-                Movie.NEW_RELEASE: lambda result: result + rental.days_rented * 3,
-                Movie.CHILDRENS: lambda result: result + 1.5 + (rental.days_rented - 3) * 1.5 if rental.days_rented > 3 else result+ 1.5
-            }[rental.movie.price_code](result)
-        return result
+        return rental.charge()
 
 
 class VideoRentalTest(unittest.TestCase):
