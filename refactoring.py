@@ -53,8 +53,8 @@ class Customer(object):
             if element.movie.price_code == Movie.NEW_RELEASE and element.days_rented > 1:
                 frequent_renter_points += 1
             # show figures for this rental
-            result += '\t' + element.movie.title + '\t' + str(this_amount) + '\n'
-            total_amount += this_amount
+            result += '\t' + element.movie.title + '\t' + str(element.charge()) + '\n'
+            total_amount += element.charge()
 
         #add footer lines
         result += 'Amount owed is %s\n' % total_amount
