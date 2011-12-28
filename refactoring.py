@@ -45,7 +45,7 @@ class Customer(object):
         total_amount, frequent_renter_points = 0, 0
         result = 'Rental Record for %s\n' % self.name
         for element in self.rentals:
-            this_amount = self.amount_for(element)
+            this_amount = element.charge()
 
             # add frequent renter points
             frequent_renter_points += 1
@@ -61,9 +61,6 @@ class Customer(object):
         result += 'You earned %s frequent renter points' % frequent_renter_points
 
         return result
-
-    def amount_for(self,rental):
-        return rental.charge()
 
 
 class VideoRentalTest(unittest.TestCase):
