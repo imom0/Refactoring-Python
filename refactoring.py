@@ -36,14 +36,7 @@ class Customer(object):
         total_amount, frequent_renter_points = 0, 0
         result = 'Rental Record for %s\n' % self.name
         for element in self.rentals:
-            this_amount = 0
-
-            # determine amounts for each line
-            this_amount = {
-                    Movie.REGULAR: lambda this_amount: this_amount + 2 + (element.days_rented - 2) * 1.5 if element.days_rented > 2 else this_amount + 2,
-                    Movie.NEW_RELEASE: lambda this_amount: this_amount + element.days_rented * 3,
-                    Movie.CHILDRENS: lambda this_amount: this_amount + 1.5 + (element.days_rented - 3) * 1.5 if element.days_rented > 3 else this_amount + 1.5
-                }[element.movie.price_code](this_amount)
+            this_amount = self.amount_for(element)
 
             # add frequent renter points
             frequent_renter_points += 1
@@ -59,6 +52,15 @@ class Customer(object):
         result += 'You earned %s frequent renter points' % frequent_renter_points
 
         return result
+
+    def amount_for(self,element):
+        this_amount = 0
+        this_amount = {
+                Movie.REGULAR: lambda this_amount: this_amount + 2 + (element.days_rented - 2) * 1.5 if element.days_rented > 2 else this_amount + 2,
+                Movie.NEW_RELEASE: lambda this_amount: this_amount + element.days_rented * 3,
+                Movie.CHILDRENS: lambda this_amount: this_amount + 1.5 + (element.days_rented - 3) * 1.5 if element.days_rented > 3 else this_amount + 1.5
+            }[element.movie.price_code](this_amount)
+        return this_amount
 
 
 class VideoRentalTest(unittest.TestCase):
