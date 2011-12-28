@@ -31,6 +31,9 @@ class Rental(object):
             }[self.movie.price_code](result)
         return result
 
+    def frequent_renter_points(self):
+        return  2 if self.movie.price_code == Movie.NEW_RELEASE and self.days_rented > 1 else 1
+
 
 class Customer(object):
 
@@ -47,11 +50,8 @@ class Customer(object):
         for element in self.rentals:
             this_amount = element.charge()
 
-            # add frequent renter points
-            frequent_renter_points += 1
-            # add bonus for a two day new release rental
-            if element.movie.price_code == Movie.NEW_RELEASE and element.days_rented > 1:
-                frequent_renter_points += 1
+            frequent_renter_points += element.frequent_renter_points()
+
             # show figures for this rental
             result += '\t' + element.movie.title + '\t' + str(element.charge()) + '\n'
             total_amount += element.charge()
