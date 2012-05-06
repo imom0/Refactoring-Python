@@ -45,7 +45,7 @@ class Customer(object):
         self.rentals.append(arg)
 
     def statement(self):
-        total_amount, frequent_renter_points = 0, 0
+        frequent_renter_points = 0
         result = 'Rental Record for %s\n' % self.name
         for element in self.rentals:
             this_amount = element.charge()
@@ -54,12 +54,17 @@ class Customer(object):
 
             # show figures for this rental
             result += '\t' + element.movie.title + '\t' + str(element.charge()) + '\n'
-            total_amount += element.charge()
 
         #add footer lines
-        result += 'Amount owed is %s\n' % total_amount
+        result += 'Amount owed is %s\n' % self.total_charge()
         result += 'You earned %s frequent renter points' % frequent_renter_points
 
+        return result
+
+    def total_charge(self):
+        result = 0
+        for charge in self.rentals:
+            result += charge
         return result
 
 
