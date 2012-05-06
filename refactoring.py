@@ -57,15 +57,18 @@ class Customer(object):
 
         #add footer lines
         result += 'Amount owed is %s\n' % self.total_charge()
-        result += 'You earned %s frequent renter points' % frequent_renter_points
+        result += 'You earned %s frequent renter points' % self.total_frequent_renter_points()
 
         return result
 
     def total_charge(self):
         result = 0
-        for charge in self.rentals:
-            result += charge
+        for element in self.rentals:
+            result += element.charge()
         return result
+
+    def total_frequent_renter_points(self):
+        return sum([rental.frequent_renter_points() for rental in self.rentals])
 
 
 class VideoRentalTest(unittest.TestCase):
