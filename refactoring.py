@@ -16,6 +16,15 @@ class Movie(object):
     def __init__(self,title,price_code):
         self.title, self.price_code = title, price_code
 
+    def charge(self, days_rented):
+        result = 0
+        result = {
+                Movie.REGULAR: lambda result: result + 2 + (days_rented - 2) * 1.5 if days_rented > 2 else result + 2,
+                Movie.NEW_RELEASE: lambda result: result + days_rented * 3,
+                Movie.CHILDRENS: lambda result: result + 1.5 + (days_rented - 3) * 1.5 if days_rented > 3 else result+ 1.5
+            }[self.price_code](result)
+        return result
+
 
 class Rental(object):
 
@@ -23,13 +32,7 @@ class Rental(object):
         self.movie, self.days_rented = movie, days_rented
 
     def charge(self):
-        result = 0
-        result = {
-                Movie.REGULAR: lambda result: result + 2 + (self.days_rented - 2) * 1.5 if self.days_rented > 2 else result + 2,
-                Movie.NEW_RELEASE: lambda result: result + self.days_rented * 3,
-                Movie.CHILDRENS: lambda result: result + 1.5 + (self.days_rented - 3) * 1.5 if self.days_rented > 3 else result+ 1.5
-            }[self.movie.price_code](result)
-        return result
+        return self.movie.charge(self.days_rented)
 
     def frequent_renter_points(self):
         return  2 if self.movie.price_code == Movie.NEW_RELEASE and self.days_rented > 1 else 1
