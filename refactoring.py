@@ -14,10 +14,17 @@ class Movie(object):
     CHILDRENS = 2
 
     def __init__(self,title,price_code):
-        self.title, self.price_code = title, price_code
+        self.title = title
+        self.set_price_code(price_code)
 
     def set_price_code(self, value):
         self.price_code = value
+        if self.price_code == Movie.REGULAR:
+            self.price = RegularPrice()
+        elif self.price_code == Movie.NEW_RELEASE:
+            self.price = NewReleasePrice()
+        elif self.price_code == Movie.CHILDRENS:
+            self.price = ChildrensPrice()
 
     def charge(self, days_rented):
         result = 0
@@ -30,6 +37,18 @@ class Movie(object):
 
     def frequent_renter_points(self, days_rented):
         return  2 if self.price_code == Movie.NEW_RELEASE and days_rented > 1 else 1
+
+
+class RegularPrice(object):
+    pass
+
+
+class NewReleasePrice(object):
+    pass
+
+
+class ChildrensPrice(object):
+    pass
 
 
 class Rental(object):
