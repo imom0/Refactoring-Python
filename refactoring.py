@@ -16,6 +16,9 @@ class Movie(object):
     def __init__(self,title,price_code):
         self.title, self.price_code = title, price_code
 
+    def set_price_code(self, value):
+        self.price_code = value
+
     def charge(self, days_rented):
         result = 0
         result = {
