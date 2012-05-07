@@ -27,12 +27,7 @@ class Movie(object):
             self.price = ChildrensPrice()
 
     def charge(self, days_rented):
-        result = 0
-        result = {
-                Movie.REGULAR: lambda result: result + 2 + (days_rented - 2) * 1.5 if days_rented > 2 else result + 2,
-                Movie.NEW_RELEASE: lambda result: result + days_rented * 3,
-                Movie.CHILDRENS: lambda result: result + 1.5 + (days_rented - 3) * 1.5 if days_rented > 3 else result+ 1.5
-            }[self.price_code](result)
+        result = self.price.charge(days_rented)
         return result
 
     def frequent_renter_points(self, days_rented):
@@ -40,15 +35,25 @@ class Movie(object):
 
 
 class RegularPrice(object):
-    pass
+    def charge(self, days_rented):
+        result = 2
+        if days_rented > 2:
+            result += (days_rented - 2) * 1.5
+        return result
 
 
 class NewReleasePrice(object):
-    pass
+    def charge(self, days_rented):
+        result = days_rented * 3
+        return result
 
 
 class ChildrensPrice(object):
-    pass
+    def charge(self, days_rented):
+        result = 1.5
+        if days_rented > 3:
+            result += (days_rented - 3) * 1.5
+        return result
 
 
 class Rental(object):
